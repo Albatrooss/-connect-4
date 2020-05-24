@@ -4,30 +4,38 @@ const COLORS = {
   '0': 'white',
 };
 
-let board = [
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0],
-];
-let turn = 1;
-let winner = null;
+const NUM_ROWS = 6;
+const NUM_COLS = 7;
 
-let msgEl = document.getElementById('msg');
-let markerEl = document.getElementById('markers');
+/*------- game start --------*/
+
+let board, winner, turn, timer;
+
+/*------- Dom Elements --------*/
+
+const msgEl = document.getElementById('msg');
+const markerEl = document.getElementById('markers');
 
 /*-------  EVENT LISTENERS   -------*/
+
+let cellEls = [];
+
+for (let colI = 0; colI < NUM_COLS; colI++) {
+  let tmp = [];
+  for (let rowI = 0; rowI < NUM_ROWS; rowI++) {
+    let el = document.getElementById(`c${colI}r${rowI}`);
+    tmp.push(el);
+  }
+  cellEls.push(tmp);
+}
 
 markerEl.addEventListener('click', handleMarkerCLick);
 
 init();
 
 function handleMarkerCLick(evt) {
+  // if (turn === -1) return;
   let el = evt.target;
-  console.log(el);
   const colId = parseInt(el.getAttribute('id').replace('col', ''));
 
   if (isNaN(colId) || winner) return;
@@ -43,16 +51,16 @@ function handleMarkerCLick(evt) {
 
 function setWinner() {
   let foundZero = false;
-  for (let colIdx = 0; colIdx < board.length; colIdx++) {
-    for (let rowIdx = 0; rowIdx < board[colIdx].length; rowIdx++) {
+  for (let colI = 0; colI < board.length; colI++) {
+    for (let rowI = 0; rowI < board[colI].length; rowI++) {
       winner =
-        checkUp(colIdx, rowIdx) ||
-        checkRight(colIdx, rowIdx) ||
-        checkDiag(colIdx, rowIdx, 1) ||
-        (colIdx, rowIdx, -1);
+        checkUp(colI, rowI) ||
+        checkRight(colI, rowI) ||
+        checkDiag(colI, rowI, 1) ||
+        checkDiag(colI, rowI, -1);
       if (winner) break;
 
-      foundZero = foundZero || board[colIdx][rowIdx] === 0;
+      foundZero = foundZero || board[colI][rowI] === 0;
     }
     if (winner) break;
   }
@@ -93,12 +101,12 @@ function checkDiag(colIdx, rowIdx, vertOffset) {
 }
 
 function render() {
-  board.forEach((colArray, colIdx) => {
-    const markerEl = document.getElementById(`col${colIdx}`);
-    markerEl.style.borderTopColor = colArray.includes(0) ? 'grey' : 'transparent';
+  board.forEach((colArray, colI) => {
+    const markerEl = document.getElementById(`col${colI}`);
+    markerEl.style.borderTopColor = colArray.includes(0) ? 'grey' : 'brown';
 
-    colArray.forEach((cell, rowIdx) => {
-      let el = document.getElementById(`c${colIdx}r${rowIdx}`);
+    colArray.forEach((cell, rowI) => {
+      let el = document.getElementById(`c${colI}r${rowI}`);
       el.style.backgroundColor = COLORS[cell];
     });
   });
@@ -127,5 +135,6 @@ function init() {
     [0, 0, 0, 0, 0, 0],
   ];
   winner = null;
+  turn = 1;
   render();
 }

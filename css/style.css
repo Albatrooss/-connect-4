@@ -1,0 +1,48 @@
+*, *::before, *::after {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#markers {
+    display: grid;
+    grid-template-columns: repeat(7, 10vmin);
+    grid-template-rows: 10vmin;
+    grid-column-gap: 1vmin;
+}
+
+#markers div:hover {
+    cursor: pointer;
+}
+
+#markers div {
+    border-top: 5vmin solid #ddd;
+    border-left: 5vmin solid transparent;
+    border-right: 5vmin solid transparent;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(7, 10vmin);
+    grid-template-rows: repeat((6, 10vmin));
+    grid-column-gap: 1vmin;
+}
+#board div {
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 10vmin;
+    height: 10vmin;
+}
